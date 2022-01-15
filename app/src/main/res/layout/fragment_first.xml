@@ -110,7 +110,6 @@
         android:id="@+id/Suggestion_List"
         android:layout_width="409dp"
         android:layout_height="303dp"
-        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Todo_list">
