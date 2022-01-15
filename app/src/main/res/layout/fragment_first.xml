@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="120dp"
-            android:text="first acitivity"
+            android:text="@string/first_activity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textview_first" />
 
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="108dp"
-            android:text="second activity"
+            android:text="@string/second_activity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/first_activity" />
 
@@ -84,14 +84,17 @@
 
         <CheckBox
             android:id="@+id/checkBox"
+            style="`"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
+            android:checked="false"
             app:layout_constraintEnd_toStartOf="@+id/first_activity"
             app:layout_constraintHorizontal_bias="0.866"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview_first" />
+            app:layout_constraintTop_toBottomOf="@+id/textview_first"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <CheckBox
             android:id="@+id/checkBox2"
@@ -118,7 +121,7 @@
             android:id="@+id/button4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="First suggestion"
+            android:text="@string/first_suggestion"
             app:layout_constraintBottom_toTopOf="@+id/button5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -131,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Second suggestion"
+            android:text="@string/second_suggestion"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
