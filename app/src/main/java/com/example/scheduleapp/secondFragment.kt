@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.widget.TextView
 import kotlin.random.Random
 import kotlin.random.Random.Default.nextInt
@@ -41,17 +43,17 @@ class secondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_second, container, false)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.suggestionRecyclerView)
 
-        var view: View = inflater.inflate(R.layout.fragment_second, container, false)
-        
+        recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+        recyclerView.adapter = RecyclerAdapter()
         val textView = view.findViewById<TextView>(R.id.textView2).apply {
             text = sugGenerator.getSuggestion()
         }
         return view
     }
-
-
-
 
     companion object {
         /**
