@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
@@ -27,12 +28,15 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var itemTitle: TextView
-        var itemDetail: TextView
+        var itemTitle: TextView = itemView.findViewById(R.id.item_title)
+        var itemDetail: TextView = itemView.findViewById(R.id.item_detail)
 
         init {
-            itemTitle = itemView.findViewById(R.id.item_title)
-            itemDetail = itemView.findViewById(R.id.item_detail)
+            itemView.setOnClickListener {
+                val position = absoluteAdapterPosition
+                print("a")
+                Toast.makeText(itemView.context, "you clicked on ${titles[position]}", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }
