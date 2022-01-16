@@ -4,22 +4,30 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
+import android.widget.CompoundButton
+
+
+
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
 
 class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
-    private var descriptions = arrayListOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3")
+    private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking", "Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
+    private var descriptions = arrayListOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3", "7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3")
+    private var isDone = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -29,7 +37,26 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     // iterate for cards?
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
         holder.itemTitle.text = titles[position]
+        if (isDone[position]) {
+            holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+        } else {
+            holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv())
+        }
+
         holder.itemDetail.text = descriptions[position]
+
+        holder.checkBox.setOnCheckedChangeListener(null)
+        holder.checkBox.isChecked = isDone[position]
+        holder.checkBox.setOnCheckedChangeListener {_: CompoundButton, isChecked: Boolean ->
+            isDone[position] = isChecked
+            holder.checkBox.isChecked = isDone[position]
+            if (isDone[position]) {
+                holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+            } else {
+                holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv())
+            }
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -39,19 +66,20 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
         var itemDetail: TextView = itemView.findViewById(R.id.item_detail)
+        var checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
         private var rc: Int = 0
 
         init {
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
-                val duration = Toast.LENGTH_SHORT
-                val text = "testing ${titles[position]}"
-                val toast = Toast.makeText(itemView.context, text, duration)
-                toast.show()
+//                val duration = Toast.LENGTH_SHORT
+//                val text = "testing ${titles[position]}"
+//                val toast = Toast.makeText(itemView.context, text, duration)
+//                toast.show()
 
                 val activity = itemView.context
                 val intent = Intent(itemView.context, EditTaskActivity::class.java).apply{
-                    putExtra(EXTRA_MESSAGE, "AAAAAAAAAAAaaaaaa")
+                    putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
 //                    putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
                 }
 //                intent.putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
