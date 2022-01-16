@@ -1,13 +1,17 @@
 package com.example.scheduleapp
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
@@ -35,6 +39,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
         var itemDetail: TextView = itemView.findViewById(R.id.item_detail)
+        private var rc: Int = 0
 
         init {
             itemView.setOnClickListener {
@@ -52,8 +57,36 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 //                intent.putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
                 activity.startActivity(intent)
 
-
+                setAlarm(10000, "This is a test notification")
             }
+        }
+
+        // Set alarm to specify when notification is triggered
+        private fun setAlarm(timeBeforeTrigger: Long, notificationMessage : String) {
+            // Create AlarmManager to help set alarm
+            val alarmManager = itemView.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            // Create Intent which will trigger notification to be sent
+            val intent = Intent(itemView.context, AlarmReceiver::class.java)
+            intent.putExtra("notificationMessage", notificationMessage)
+
+            lateinit var pendingIntent: PendingIntent
+            if (Build.VERSION.SDK_INT >= 23) {
+                pendingIntent = PendingIntent.getBroadcast(itemView.context, this.rc, intent, PendingIntent.FLAG_IMMUTABLE)        // when Version >= 23, need to include mutability flag
+            } else {
+                pendingIntent = PendingIntent.getBroadcast(itemView.context, this.rc, intent, 0)
+            }
+
+            // Set when the alarm is triggered
+            val calendar = Calendar.getInstance()
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + timeBeforeTrigger, pendingIntent)
+
+            incrementRc()
+        }
+
+        // Increments rc
+        private fun incrementRc() {
+            rc++
         }
     }
 }
