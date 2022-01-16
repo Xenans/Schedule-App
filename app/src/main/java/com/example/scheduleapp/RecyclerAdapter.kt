@@ -30,8 +30,6 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     private var activityClasses = arrayListOf(test, test2)
 
     private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
-    private var descriptions = arrayListOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3")
-    private var isDone = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -43,7 +41,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     // iterate for cards?
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
         holder.itemTitle.text = activityClasses[position].title
-        if (isDone[position]) {
+        if (activityClasses[position].isRecurring) {
             holder.itemTitle.paintFlags = holder.itemTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
             holder.itemTitle.paintFlags = holder.itemTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
@@ -54,9 +52,9 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         holder.checkBox.setOnCheckedChangeListener(null)
         holder.checkBox.isChecked = activityClasses[position].isRecurring
         holder.checkBox.setOnCheckedChangeListener {_: CompoundButton, isChecked: Boolean ->
-            isDone[position] = isChecked
+            activityClasses[position].isRecurring = isChecked
             holder.checkBox.isChecked = activityClasses[position].isRecurring
-            if (isDone[position]) {
+            if (activityClasses[position].isRecurring) {
                 holder.itemTitle.paintFlags = holder.itemTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             } else {
                 holder.itemTitle.paintFlags = holder.itemTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
@@ -78,21 +76,14 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         init {
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
-                val duration = Toast.LENGTH_SHORT
-                val text = "testing ${activityClasses[position].title}"
-
-                val toast = Toast.makeText(itemView.context, text, duration)
-                toast.show()
 
 //                // Test stuff
                 saveData(activityClasses, itemView.context)
 
                 val activity = itemView.context
                 val intent = Intent(itemView.context, EditTaskActivity::class.java).apply {
-                    putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
-//                    putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
+                    putExtra(EXTRA_MESSAGE, "testing ${activityClasses[position].title}")
                 }
-//                intent.putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
                 activity.startActivity(intent)
                 setAlarm(10000, "This is a test notification")
             }
@@ -139,9 +130,6 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         this.notifyItemRemoved(index)
         saveData(activityClasses, context)
     }
-
-
-
 
     private fun saveData(activity: ArrayList<ActivityClass>, context: Context) {
 
