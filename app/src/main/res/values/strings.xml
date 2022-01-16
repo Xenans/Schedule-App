@@ -8,6 +8,12 @@
     <string name="refresh">Refresh</string>
     <string name="previous">Previous</string>
 
+    <string name="first_activity">First Activity</string>
+    <string name="second_activity">Second Activity</string>
+
+    <string name="first_suggestion">First suggestion</string>
+    <string name="second_suggestion">Second suggestion</string>
+
     <string name="to_do_list">Here are your activities for the day:</string>
     <string name="suggestion_list">Looking for more to do? Here are some ideas:</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
