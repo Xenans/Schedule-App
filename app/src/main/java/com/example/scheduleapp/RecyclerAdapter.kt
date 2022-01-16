@@ -42,24 +42,24 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     // iterate for cards?
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        holder.itemTitle.text = titles[position]
+        holder.itemTitle.text = activityClasses[position].title
         if (isDone[position]) {
-            holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+            holder.itemTitle.paintFlags = holder.itemTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
-            holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv())
+            holder.itemTitle.paintFlags = holder.itemTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
-        holder.itemDetail.text = descriptions[position]
+        holder.itemDetail.text = activityClasses[position].description
 
         holder.checkBox.setOnCheckedChangeListener(null)
-        holder.checkBox.isChecked = isDone[position]
+        holder.checkBox.isChecked = activityClasses[position].isRecurring
         holder.checkBox.setOnCheckedChangeListener {_: CompoundButton, isChecked: Boolean ->
             isDone[position] = isChecked
-            holder.checkBox.isChecked = isDone[position]
+            holder.checkBox.isChecked = activityClasses[position].isRecurring
             if (isDone[position]) {
-                holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+                holder.itemTitle.paintFlags = holder.itemTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             } else {
-                holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv())
+                holder.itemTitle.paintFlags = holder.itemTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
         }
 

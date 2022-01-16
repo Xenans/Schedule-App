@@ -52,7 +52,7 @@ class firstFragment : Fragment() {
         val clickMyButton = view.findViewById<Button>(R.id.addButton)
 
         clickMyButton.setOnClickListener {
-            (adapter as RecyclerAdapter).addActivity(view.context,"Title", "description", true)
+            (adapter as RecyclerAdapter).addActivity(view.context,"Title", "description", false)
         }
 
 
