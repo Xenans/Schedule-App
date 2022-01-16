@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/firstFragment"
+        android:title="@string/todo"
+        android:icon="@drawable/ic_baseline_format_list_bulleted"/>
+    <item
+        android:id="@+id/secondFragment"
+        android:title="@string/suggestions"
+        android:icon="@drawable/ic_baseline_not_listed_location"/>
+</menu>
