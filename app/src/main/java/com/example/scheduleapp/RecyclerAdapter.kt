@@ -14,8 +14,12 @@ const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
 class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    private var titles = arrayOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
-    private var descriptions = arrayOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3")
+    private var test = ActivityClass("Run", "7pm", false)
+    private var test2 = ActivityClass("Walk", "Description?", false)
+    private var activityClasses = arrayListOf(test, test2)
+
+    private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
+    private var descriptions = arrayListOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -24,12 +28,12 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     // iterate for cards?
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        holder.itemTitle.text = titles[position]
-        holder.itemDetail.text = descriptions[position]
+        holder.itemTitle.text = activityClasses[position].title
+        holder.itemDetail.text = activityClasses[position].description
     }
 
     override fun getItemCount(): Int {
-        return titles.size
+        return activityClasses.size
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -40,7 +44,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
                 val duration = Toast.LENGTH_SHORT
-                val text = "testing ${titles[position]}"
+                val text = "testing ${activityClasses[position].title}"
                 val toast = Toast.makeText(itemView.context, text, duration)
                 toast.show()
 
@@ -56,4 +60,16 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             }
         }
     }
+
+    fun addActivity(title: String, description: String, isRecurring: Boolean) {
+        var activityClass = ActivityClass(title, description, isRecurring)
+        activityClasses.add(activityClass)
+        val index = activityClasses.size + 1
+        notifyItemInserted(index)
+    }
+
+    fun saveData() {
+        var post = Post()
+    }
+
 }

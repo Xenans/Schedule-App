@@ -1,5 +1,7 @@
 package com.example.scheduleapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,7 +24,6 @@ class firstFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var layoutManager: RecyclerView.LayoutManager? = null
     var adapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>? = null
-
 
     private var param1: String? = null
     private var param2: String? = null
