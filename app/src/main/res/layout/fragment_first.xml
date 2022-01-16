@@ -76,25 +76,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/first_activity"
-                    android:layout_width="wrap_content"
+                <com.ms.square.android.expandabletextview.ExpandableTextView
+                    android:id="@+id/expand_text_view"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/first_activity"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:animDuration="200"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:maxCollapsedLines="1">
+
+                    <TextView
+                        android:id="@id/expandable_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="#666666"
+                        android:textSize="16sp" />
+
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|bottom"
+                        android:background="@android:color/transparent"
+                        android:padding="16dp" />
+
+                </com.ms.square.android.expandabletextview.ExpandableTextView>
 
                 <CheckBox
                     android:id="@+id/checkbox"
                     style="`"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
                     android:checked="false"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/first_activity"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="DuplicateSpeakableTextCheck" />
             </androidx.constraintlayout.widget.ConstraintLayout>

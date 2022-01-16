@@ -38,7 +38,7 @@ class FirstFragment : Fragment() {
         }
 
         val expTv: ExpandableTextView = view.findViewById(R.id.expand_text_view)
-        expTv.setText("Name Of Activity \n dscription of the thing")
+        expTv.setText("Name of thing to do \n description of the thing")
     }
 
     override fun onDestroyView() {
