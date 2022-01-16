@@ -4,4 +4,8 @@
     <string name="no">no</string>
     <string name="todo">To do</string>
     <string name="suggestions">Suggestions</string>
+
+    <string name="notification_channel_id">channel1</string>
+    <string name="notification_channel_name">notificationChannel</string>
+    <string name="notification_channel_description">Channel for Alarm Manager</string>
 </resources>
