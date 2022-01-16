@@ -1,4 +1,4 @@
-package com.example.testapp.ui.transform
+package com.example.scheduleapp.ui.transform
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testapp.R
-import com.example.testapp.databinding.FragmentTransformBinding
-import com.example.testapp.databinding.ItemTransformBinding
+import com.example.scheduleapp.R
+import com.example.scheduleapp.databinding.FragmentTransformBinding
+import com.example.scheduleapp.databinding.ItemTransformBinding
 
 /**
  * Fragment that demonstrates a responsive layout pattern where the format of the content

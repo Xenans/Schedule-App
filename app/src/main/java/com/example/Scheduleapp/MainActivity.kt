@@ -1,4 +1,4 @@
-package com.example.testapp
+package com.example.scheduleapp
 
 import android.os.Bundle
 import android.view.Menu
@@ -11,7 +11,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.appcompat.app.AppCompatActivity
-import com.example.testapp.databinding.ActivityMainBinding
+import com.example.scheduleapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

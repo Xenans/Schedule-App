@@ -1,13 +1,13 @@
-package com.example.testapp.ui.settings
+package com.example.scheduleapp.ui.reflow
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SettingsViewModel : ViewModel() {
+class ReflowViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is settings Fragment"
+        value = "This is reflow Fragment"
     }
     val text: LiveData<String> = _text
 }

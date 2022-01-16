@@ -1,4 +1,4 @@
-package com.example.testapp.ui.settings
+package com.example.scheduleapp.ui.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.testapp.R
-import com.example.testapp.databinding.FragmentSettingsBinding
+import com.example.scheduleapp.R
+import com.example.scheduleapp.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
 
