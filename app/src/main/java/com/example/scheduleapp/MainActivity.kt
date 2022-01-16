@@ -47,8 +47,4 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
-
-
-
 }

@@ -4,24 +4,28 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
+import android.widget.CompoundButton
+
+
+
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
 
 class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    private var titles = arrayOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking", "Message friend", "Take out the trash", "Eat burrito", "Take a nap", "Volunteer")
-    private var descriptions = arrayOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3", "Desc4", "Desc5", "Desc6", "Desc7", "Desc8")
-    private var checkboxes = arrayOf(false, false, false, false, false, false, false, false, false, false, false, false, false)
+    private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking", "Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
+    private var descriptions = arrayListOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3", "7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3")
+    private var isDone = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -31,8 +35,25 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     // iterate for cards?
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
         holder.itemTitle.text = titles[position]
+        if (isDone[position]) {
+            holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+        } else {
+            holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv())
+        }
+
         holder.itemDetail.text = descriptions[position]
-        holder.itemCheckBox.setChecked(checkboxes[position])
+
+        holder.checkBox.setOnCheckedChangeListener(null)
+        holder.checkBox.isChecked = isDone[position]
+        holder.checkBox.setOnCheckedChangeListener {_: CompoundButton, isChecked: Boolean ->
+            isDone[position] = isChecked
+            holder.checkBox.isChecked = isDone[position]
+            if (isDone[position]) {
+                holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+            } else {
+                holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv())
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -43,7 +64,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
         var itemDetail: TextView = itemView.findViewById(R.id.item_detail)
-        var itemCheckBox: CheckBox = itemView.findViewById(R.id.item_checkBox)
+        var checkBox: CheckBox = itemView.findViewById(R.id.item_checkBox)
 
         var taskId: Int = 0                                                         // simulate task id, should actually be stored along with the task
         var timeBeforeTrigger: Long = 10000                                         // simulate time before trigger, should actually be parsed from what the user sets in the task
@@ -53,9 +74,16 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         init {
             // Listener for when the card is clicked
             itemView.setOnClickListener {
+                val position = absoluteAdapterPosition
+//                val duration = Toast.LENGTH_SHORT
+//                val text = "testing ${titles[position]}"
+//                val toast = Toast.makeText(itemView.context, text, duration)
+//                toast.show()
+
                 val activity = itemView.context
-                val intent = Intent(itemView.context, EditTaskActivity::class.java).apply {
-                    putExtra("EXTRA_MESSAGE", "TEST")
+                val intent = Intent(itemView.context, EditTaskActivity::class.java).apply{
+                    putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
+//                    putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
                 }
                 activity.startActivity(intent)
 
@@ -66,8 +94,6 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             itemView.findViewById<CheckBox>(R.id.item_checkBox).setOnClickListener {
                 // Remove notification for the task (recreate the PendingIntent to remove it)
                 cancelAlarm(notificationMessage, taskId)
-
-                // TODO: remove task card or cross it out
             }
 
             incrementTaskId()
