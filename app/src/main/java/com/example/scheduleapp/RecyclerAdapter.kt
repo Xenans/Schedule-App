@@ -1,11 +1,17 @@
 package com.example.scheduleapp
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+
+const val EXTRA_MESSAGE = "com.example.blank.MESSAGE"
+
 
 class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
@@ -34,7 +40,22 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         init {
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
-                Toast.makeText(itemView.context, "do something here ${titles[position]}", Toast.LENGTH_SHORT).show()
+                val duration = Toast.LENGTH_SHORT
+//                val text = "testing ddddd"
+                val text = "testing ${titles[position]}"
+
+                val toast = Toast.makeText(itemView.context, text, duration)
+                toast.show()
+
+
+//                val editText = findViewById<EditText>(R.id.editTextTextPersonName)
+//                val message = editText.text.toString()
+//                val intent = Intent(this, DisplayMessageActivity::class.java).apply {
+//                    putExtra(EXTRA_MESSAGE, message)
+//                }
+//                startActivity(intent)
+
+
             }
         }
     }
