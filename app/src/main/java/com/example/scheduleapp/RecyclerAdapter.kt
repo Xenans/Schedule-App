@@ -1,5 +1,7 @@
 package com.example.scheduleapp
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import com.google.gson.Gson
+import java.io.FileInputStream
+import java.io.ObjectOutputStream
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
@@ -50,9 +54,9 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                 val toast = Toast.makeText(itemView.context, text, duration)
                 toast.show()
 
-                // Test stuff
+//                // Test stuff
                 val testActivity = ActivityClass("TITLE    ", "DESCRIPTION    ", false)
-                saveData(testActivity)
+                saveData(testActivity, itemView.context)
 
 
                 val activity = itemView.context
@@ -73,11 +77,11 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         notifyItemInserted(index)
     }
 
-    private fun saveData(activity: ActivityClass) {
+    private fun saveData(activity: ActivityClass, context: Context) {
 
         val jsonString:String = Gson().toJson(activity)
-        val file = File("/PostJson.json")
-        file.writeText(jsonString)
+        val file = File(context.filesDir, "PostJson.json")
+        file.writeText(jsonString, Charsets.UTF_8)
 
     }
 
