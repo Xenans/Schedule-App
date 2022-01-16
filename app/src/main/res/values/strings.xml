@@ -4,4 +4,5 @@
     <string name="no">no</string>
     <string name="todo">To do</string>
     <string name="suggestions">Suggestions</string>
+    <string name="add_task">Add Task</string>
 </resources>

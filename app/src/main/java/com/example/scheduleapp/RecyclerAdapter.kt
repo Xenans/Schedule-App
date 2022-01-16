@@ -69,11 +69,18 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         }
     }
 
-    fun addActivity(title: String, description: String, isRecurring: Boolean) {
+    fun addActivity(context: Context, title: String, description: String, isRecurring: Boolean) {
         val activityClass = ActivityClass(title, description, isRecurring)
         activityClasses.add(activityClass)
         val index = activityClasses.size + 1
         this.notifyItemInserted(index)
+        saveData(activityClasses, context)
+    }
+
+    fun removeActivity(context: Context, index : Int) {
+        activityClasses.removeAt(index)
+        this.notifyItemRemoved(index)
+        saveData(activityClasses, context)
     }
 
     private fun saveData(activity: ArrayList<ActivityClass>, context: Context) {

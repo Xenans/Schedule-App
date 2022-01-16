@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -46,7 +48,14 @@ class firstFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-        recyclerView.adapter = RecyclerAdapter()
+        adapter = RecyclerAdapter()
+        recyclerView.adapter = adapter
+
+        val clickMyButton = view.findViewById<Button>(R.id.addButton)
+
+        clickMyButton.setOnClickListener {
+            (adapter as RecyclerAdapter).addActivity(view.context,"Title", "description", true)
+        }
 
 
         return view
@@ -71,4 +80,5 @@ class firstFragment : Fragment() {
                 }
             }
     }
+
 }
