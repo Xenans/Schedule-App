@@ -32,15 +32,15 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     private var ids = arrayListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
         val text = getData(view.context)
-        Log.v("LWEJFLWEKFJWELKFJWELKFJ", text, )
+        Log.v("LWEJFLWEKFJWELKFJWELKFJ", text)
         return ViewHolder(view)
     }
 
     // iterate for cards?
-    override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemTitle.text = activityClasses[position].title
         if (activityClasses[position].isRecurring) {
             holder.itemTitle.paintFlags = holder.itemTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
@@ -64,7 +64,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         }
 
         // Store task's unique id along with card
-        holder.itemView.setTag(ids[position])
+        holder.itemView.tag = ids[position]
     }
 
     override fun getItemCount(): Int {
@@ -79,8 +79,8 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
         // Initialize listeners
         init {
-            var timeBeforeTrigger: Long = 10000                                         // simulate time before trigger, should actually be parsed from what the user sets in the task
-            var notificationMessage: String = "This is a test notification"             // simulate notification message, should actually be parsed from task
+            val timeBeforeTrigger: Long = 10000                                         // simulate time before trigger, should actually be parsed from what the user sets in the task
+            val notificationMessage: String = "This is a test notification"             // simulate notification message, should actually be parsed from task
 
             // Listener for when the card is clicked
             itemView.setOnClickListener {
@@ -95,12 +95,12 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                 }
                 activity.startActivity(intent)
 
-                setAlarm(timeBeforeTrigger, notificationMessage, (itemView.getTag().toString()).toInt())
+                setAlarm(timeBeforeTrigger, notificationMessage, (itemView.tag.toString()).toInt())
             }
 
             // Listener for when the checkbox that is part of the card is clicked
             itemView.findViewById<CheckBox>(R.id.item_checkBox).setOnClickListener {
-                cancelAlarm(notificationMessage, (itemView.getTag().toString()).toInt())
+                cancelAlarm(notificationMessage, (itemView.tag.toString()).toInt())
             }
         }
 
@@ -113,11 +113,10 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             val intent = Intent(itemView.context, AlarmReceiver::class.java)
             intent.putExtra("notificationMessage", notificationMessage)
 
-            lateinit var pendingIntent: PendingIntent
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                pendingIntent = PendingIntent.getBroadcast(itemView.context, taskId, intent, PendingIntent.FLAG_MUTABLE)        // when Version >= 23, need to include mutability flag
+            val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.getBroadcast(itemView.context, taskId, intent, PendingIntent.FLAG_MUTABLE)        // when Version >= 23, need to include mutability flag
             } else {
-                pendingIntent = PendingIntent.getBroadcast(itemView.context, taskId, intent, 0)
+                PendingIntent.getBroadcast(itemView.context, taskId, intent, 0)
             }
 
             // Set when the alarm is triggered
