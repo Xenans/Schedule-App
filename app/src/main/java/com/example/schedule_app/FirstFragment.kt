@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.schedule_app.databinding.FragmentFirstBinding
+import com.ms.square.android.expandabletextview.ExpandableTextView
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -35,6 +36,9 @@ class FirstFragment : Fragment() {
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
+
+        val expTv: ExpandableTextView = view.findViewById(R.id.expand_text_view)
+        expTv.setText("Name Of Activity \n dscription of the thing")
     }
 
     override fun onDestroyView() {

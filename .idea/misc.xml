@@ -3,10 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/jason/StudioProjects/Schedule-App/app/src/main/res/drawable/ic_launcher_background.xml" value="0.4630208333333333" />
-        <entry key="..\:/Users/jason/StudioProjects/Schedule-App/app/src/main/res/layout/activity_main.xml" value="0.446875" />
-        <entry key="..\:/Users/jason/StudioProjects/Schedule-App/app/src/main/res/layout/content_main.xml" value="0.42239583333333336" />
-        <entry key="..\:/Users/jason/StudioProjects/Schedule-App/app/src/main/res/layout/fragment_first.xml" value="0.446875" />
+        <entry key="..\:/Users/Terence/Desktop/coding/fun/Schedule-App/app/src/main/res/layout/activity_main.xml" value="0.2726449275362319" />
+        <entry key="..\:/Users/Terence/Desktop/coding/fun/Schedule-App/app/src/main/res/layout/content_main.xml" value="0.2726449275362319" />
+        <entry key="..\:/Users/Terence/Desktop/coding/fun/Schedule-App/app/src/main/res/layout/fragment_first.xml" value="0.2726449275362319" />
+        <entry key="..\:/Users/Terence/Desktop/coding/fun/Schedule-App/app/src/main/res/layout/fragment_second.xml" value="0.20520833333333333" />
       </map>
     </option>
   </component>
