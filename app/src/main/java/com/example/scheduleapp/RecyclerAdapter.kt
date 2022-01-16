@@ -11,7 +11,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
 import java.io.BufferedReader
+
+
+
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
@@ -19,16 +25,38 @@ const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     private var test = ActivityClass("Run", "7pm", false)
-    private var test2 = ActivityClass("Walk", "Description?", false)
-    private var activityClasses = arrayListOf(test, test2)
+    private var test2 = ActivityClass("Walk", "Description2", false)
+//    private var activityClasses = arrayListOf(test, test2)
+    private var activityClasses = arrayListOf(test)
+
 
     private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
     private var descriptions = arrayListOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3")
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
+
+        // Wipe file as necessary
+        val file = File(view.context.filesDir, "PostJson.json")
+        file.writeText("[{\"description\":\"7pm\",\"isRecurring\":false,\"title\":\"Run\"},{\"description\":\"wadfwadf\",\"isRecurring\":false,\"title\":\"Run\"}]")
+
         val text = getData(view.context)
-        Log.v("LWEJFLWEKFJWELKFJWELKFJ", text, )
+        if (text != null) {
+            Log.v("WRITINGWRIETNERWIG", text.toString())
+            activityClasses.clear()
+            activityClasses.addAll(text)
+//            this.notifyDataSetChanged()
+        }
+        Log.v("LWEJFLWEKFJWELKFJWREAD", activityClasses.toString())
+        text?.forEach { Log.v("FDAFSDAFDSA", it.toString()) }
+        activityClasses?.forEach { Log.v("RQWEQWEWQEQW", it.toString()) }
+
+
+
+//        var testTask = gson.fromJson(text, ActivityClass::class.java)
+//        Log.v("GFDSAGFDSGF!!!!!!!!!", text, )
+
+
         return ViewHolder(view)
     }
 
@@ -78,21 +106,19 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     private fun saveData(activity: ArrayList<ActivityClass>, context: Context) {
 
+        Log.v("IMWRITINGDOWN", activity.toString())
         val file = File(context.filesDir, "PostJson.json")
-        file.writeText("", Charsets.UTF_8)
-        for (item in activity) {
-            val jsonString: String = Gson().toJson(item)
-            file.appendText(jsonString, Charsets.UTF_8)
-        }
+        val jsonString: String = Gson().toJson(activity)
+        file.writeText(jsonString, Charsets.UTF_8)
+        Log.v("DSADSADSADSADSASAVED", jsonString)
     }
 
-    private fun getData(context: Context): String {
-        //activityClasses = arrayListOf()
+    private fun getData(context: Context): Array<ActivityClass>? {
         val file = File(context.filesDir, "PostJson.json")
         val bufferedReader: BufferedReader = file.bufferedReader()
         val inputString = bufferedReader.use { it.readText() }
-        //activityClasses += the item
-        // temporarily returning this
-        return inputString
+        var gson = GsonBuilder().setLenient().create()
+
+        return gson.fromJson(inputString, Array<ActivityClass>::class.java)
     }
 }

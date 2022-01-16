@@ -47,6 +47,7 @@ class firstFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
         recyclerView.adapter = RecyclerAdapter()
+        recyclerView.invalidate()
 
 
         return view
