@@ -1,11 +1,9 @@
-package com.example.srolltesting
+package com.example.scheduleapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.scheduleapp.R
-import com.example.scheduleapp.RecyclerAdapter
 
 class MainActivity : AppCompatActivity() {
 
