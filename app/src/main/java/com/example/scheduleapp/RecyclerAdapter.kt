@@ -12,13 +12,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import android.widget.CompoundButton
 import java.io.File
 import com.google.gson.Gson
 import java.io.BufferedReader
+import android.widget.Toast
+
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
@@ -29,7 +30,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     private var test2 = ActivityClass("Walk", "Description?", false)
     private var activityClasses = arrayListOf(test, test2)
 
-    private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
+    private var ids = arrayListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -49,6 +50,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
         holder.itemDetail.text = activityClasses[position].description
 
+        // Set task card checkbox
         holder.checkBox.setOnCheckedChangeListener(null)
         holder.checkBox.isChecked = activityClasses[position].isRecurring
         holder.checkBox.setOnCheckedChangeListener {_: CompoundButton, isChecked: Boolean ->
@@ -61,19 +63,26 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             }
         }
 
+        // Store task's unique id along with card
+        holder.itemView.setTag(ids[position])
     }
 
     override fun getItemCount(): Int {
         return activityClasses.size
     }
 
+    // Creates each task card
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var itemTitle: TextView = itemView.findViewById(R.id.item_title)
         var itemDetail: TextView = itemView.findViewById(R.id.item_detail)
-        var checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
-        private var rc: Int = 0
+        var checkBox: CheckBox = itemView.findViewById(R.id.item_checkBox)
 
+        // Initialize listeners
         init {
+            var timeBeforeTrigger: Long = 10000                                         // simulate time before trigger, should actually be parsed from what the user sets in the task
+            var notificationMessage: String = "This is a test notification"             // simulate notification message, should actually be parsed from task
+
+            // Listener for when the card is clicked
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
 
@@ -85,12 +94,18 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                     putExtra(EXTRA_MESSAGE, "testing ${activityClasses[position].title}")
                 }
                 activity.startActivity(intent)
-                setAlarm(10000, "This is a test notification")
+
+                setAlarm(timeBeforeTrigger, notificationMessage, (itemView.getTag().toString()).toInt())
+            }
+
+            // Listener for when the checkbox that is part of the card is clicked
+            itemView.findViewById<CheckBox>(R.id.item_checkBox).setOnClickListener {
+                cancelAlarm(notificationMessage, (itemView.getTag().toString()).toInt())
             }
         }
 
         // Set alarm to specify when notification is triggered
-        private fun setAlarm(timeBeforeTrigger: Long, notificationMessage : String) {
+        private fun setAlarm(timeBeforeTrigger: Long, notificationMessage: String, taskId: Int) {
             // Create AlarmManager to help set alarm
             val alarmManager = itemView.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -99,21 +114,34 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
             intent.putExtra("notificationMessage", notificationMessage)
 
             lateinit var pendingIntent: PendingIntent
-            if (Build.VERSION.SDK_INT >= 23) {
-                pendingIntent = PendingIntent.getBroadcast(itemView.context, this.rc, intent, PendingIntent.FLAG_IMMUTABLE)        // when Version >= 23, need to include mutability flag
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                pendingIntent = PendingIntent.getBroadcast(itemView.context, taskId, intent, PendingIntent.FLAG_MUTABLE)        // when Version >= 23, need to include mutability flag
             } else {
-                pendingIntent = PendingIntent.getBroadcast(itemView.context, this.rc, intent, 0)
+                pendingIntent = PendingIntent.getBroadcast(itemView.context, taskId, intent, 0)
             }
 
             // Set when the alarm is triggered
             val calendar = Calendar.getInstance()
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + timeBeforeTrigger, pendingIntent)
-
-            incrementRc()
         }
-        // Increments rc
-        private fun incrementRc() {
-            rc++
+
+        // Cancel alarm for a specific notification
+        private fun cancelAlarm(notificationMessage: String, taskId: Int) {
+            // Create AlarmManager to help set alarm
+            val alarmManager = itemView.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            // Create Intent which will trigger notification to be sent
+            val intent = Intent(itemView.context, AlarmReceiver::class.java)
+            intent.putExtra("notificationMessage", notificationMessage)
+
+            lateinit var pendingIntent: PendingIntent
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                pendingIntent = PendingIntent.getBroadcast(itemView.context, taskId, intent, PendingIntent.FLAG_MUTABLE)        // when Version >= 23, need to include mutability flag
+            } else {
+                pendingIntent = PendingIntent.getBroadcast(itemView.context, taskId, intent, 0)
+            }
+
+            alarmManager.cancel(pendingIntent)
         }
     }
 

@@ -13,7 +13,7 @@ class EditTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_task)
-        val message = intent.getStringExtra(EXTRA_MESSAGE)
+        val message = intent.getStringExtra("EXTRA_MESSAGE")
         val textView = findViewById<TextView>(R.id.textView).apply {
             text = message
         }
