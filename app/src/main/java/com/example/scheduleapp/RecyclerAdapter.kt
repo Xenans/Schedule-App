@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
+import com.google.gson.Gson
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
@@ -45,8 +46,14 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                 val position = absoluteAdapterPosition
                 val duration = Toast.LENGTH_SHORT
                 val text = "testing ${activityClasses[position].title}"
+
                 val toast = Toast.makeText(itemView.context, text, duration)
                 toast.show()
+
+                // Test stuff
+                val testActivity = ActivityClass("TITLE    ", "DESCRIPTION    ", false)
+                saveData(testActivity)
+
 
                 val activity = itemView.context
                 val intent = Intent(itemView.context, EditTaskActivity::class.java).apply{
@@ -55,8 +62,6 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                 }
 //                intent.putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
                 activity.startActivity(intent)
-
-
             }
         }
     }
@@ -68,8 +73,12 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         notifyItemInserted(index)
     }
 
-    fun saveData() {
-        var post = Post()
+    private fun saveData(activity: ActivityClass) {
+
+        val jsonString:String = Gson().toJson(activity)
+        val file = File("/PostJson.json")
+        file.writeText(jsonString)
+
     }
 
 }
