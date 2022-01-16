@@ -1,7 +1,5 @@
 package com.example.scheduleapp
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -44,7 +42,7 @@ class firstFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_first, container, false)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.toDoRecyclerView)
 
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
@@ -80,5 +78,4 @@ class firstFragment : Fragment() {
                 }
             }
     }
-
 }
