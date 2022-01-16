@@ -16,51 +16,55 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import android.widget.CompoundButton
-
-
-
+import java.io.File
+import com.google.gson.Gson
+import java.io.BufferedReader
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
 
 class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking", "Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
-    private var descriptions = arrayListOf("7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3", "7pm", "Description?", "Time", "Upcoming time", "Can be any content", "Desc1", "Desc2", "Desc3")
-    private var isDone = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)
+    private var test = ActivityClass("Run", "7pm", false)
+    private var test2 = ActivityClass("Walk", "Description?", false)
+    private var activityClasses = arrayListOf(test, test2)
+
+    private var titles = arrayListOf("Run", "Walk", "Gym", "Drink Water", "Jumping", "Swimming", "Eating", "Talking")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
+        val text = getData(view.context)
+        Log.v("LWEJFLWEKFJWELKFJWELKFJ", text, )
         return ViewHolder(view)
     }
 
     // iterate for cards?
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        holder.itemTitle.text = titles[position]
-        if (isDone[position]) {
-            holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+        holder.itemTitle.text = activityClasses[position].title
+        if (activityClasses[position].isRecurring) {
+            holder.itemTitle.paintFlags = holder.itemTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
-            holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv())
+            holder.itemTitle.paintFlags = holder.itemTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
-        holder.itemDetail.text = descriptions[position]
+        holder.itemDetail.text = activityClasses[position].description
 
         holder.checkBox.setOnCheckedChangeListener(null)
-        holder.checkBox.isChecked = isDone[position]
+        holder.checkBox.isChecked = activityClasses[position].isRecurring
         holder.checkBox.setOnCheckedChangeListener {_: CompoundButton, isChecked: Boolean ->
-            isDone[position] = isChecked
-            holder.checkBox.isChecked = isDone[position]
-            if (isDone[position]) {
-                holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+            activityClasses[position].isRecurring = isChecked
+            holder.checkBox.isChecked = activityClasses[position].isRecurring
+            if (activityClasses[position].isRecurring) {
+                holder.itemTitle.paintFlags = holder.itemTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             } else {
-                holder.itemTitle.setPaintFlags(holder.itemTitle.getPaintFlags() and Paint.STRIKE_THRU_TEXT_FLAG.inv())
+                holder.itemTitle.paintFlags = holder.itemTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
         }
 
     }
 
     override fun getItemCount(): Int {
-        return titles.size
+        return activityClasses.size
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -72,19 +76,15 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         init {
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
-//                val duration = Toast.LENGTH_SHORT
-//                val text = "testing ${titles[position]}"
-//                val toast = Toast.makeText(itemView.context, text, duration)
-//                toast.show()
+
+//                // Test stuff
+                saveData(activityClasses, itemView.context)
 
                 val activity = itemView.context
-                val intent = Intent(itemView.context, EditTaskActivity::class.java).apply{
-                    putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
-//                    putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
+                val intent = Intent(itemView.context, EditTaskActivity::class.java).apply {
+                    putExtra(EXTRA_MESSAGE, "testing ${activityClasses[position].title}")
                 }
-//                intent.putExtra(EXTRA_MESSAGE, "testing ${titles[position]}")
                 activity.startActivity(intent)
-
                 setAlarm(10000, "This is a test notification")
             }
         }
@@ -111,10 +111,43 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
             incrementRc()
         }
-
         // Increments rc
         private fun incrementRc() {
             rc++
         }
+    }
+
+    fun addActivity(context: Context, title: String, description: String, isRecurring: Boolean) {
+        val activityClass = ActivityClass(title, description, isRecurring)
+        activityClasses.add(activityClass)
+        val index = activityClasses.size + 1
+        this.notifyItemInserted(index)
+        saveData(activityClasses, context)
+    }
+
+    fun removeActivity(context: Context, index : Int) {
+        activityClasses.removeAt(index)
+        this.notifyItemRemoved(index)
+        saveData(activityClasses, context)
+    }
+
+    private fun saveData(activity: ArrayList<ActivityClass>, context: Context) {
+
+        val file = File(context.filesDir, "PostJson.json")
+        file.writeText("", Charsets.UTF_8)
+        for (item in activity) {
+            val jsonString: String = Gson().toJson(item)
+            file.appendText(jsonString, Charsets.UTF_8)
+        }
+    }
+
+    private fun getData(context: Context): String {
+        //activityClasses = arrayListOf()
+        val file = File(context.filesDir, "PostJson.json")
+        val bufferedReader: BufferedReader = file.bufferedReader()
+        val inputString = bufferedReader.use { it.readText() }
+        //activityClasses += the item
+        // temporarily returning this
+        return inputString
     }
 }
