@@ -2,6 +2,7 @@ package com.example.scheduleapp
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import com.google.gson.Gson
 import java.io.BufferedReader
-import java.io.IOException
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
@@ -27,8 +27,8 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
-        //val text = getData(view.context)
-        //Toast.makeText(view.context, text, Toast.LENGTH_SHORT).show()
+        val text = getData(view.context)
+        Log.v("LWEJFLWEKFJWELKFJWELKFJ", text, )
         return ViewHolder(view)
     }
 
@@ -58,7 +58,6 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 //                // Test stuff
                 saveData(activityClasses, itemView.context)
 
-
                 val activity = itemView.context
                 val intent = Intent(itemView.context, EditTaskActivity::class.java).apply{
                     putExtra(EXTRA_MESSAGE, "AAAAAAAAAAAaaaaaa")
@@ -79,24 +78,21 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     private fun saveData(activity: ArrayList<ActivityClass>, context: Context) {
 
+        val file = File(context.filesDir, "PostJson.json")
+        file.writeText("", Charsets.UTF_8)
         for (item in activity) {
             val jsonString: String = Gson().toJson(item)
-            val file = File(context.filesDir, "PostJson.json")
-            file.writeText(jsonString, Charsets.UTF_8)
+            file.appendText(jsonString, Charsets.UTF_8)
         }
-
     }
-/*
-    private fun getData(context: Context): String? {
 
-        var gson = Gson()
+    private fun getData(context: Context): String {
+        //activityClasses = arrayListOf()
         val file = File(context.filesDir, "PostJson.json")
         val bufferedReader: BufferedReader = file.bufferedReader()
         val inputString = bufferedReader.use { it.readText() }
-        return gson.fromJson(inputString)
-
+        //activityClasses += the item
+        // temporarily returning this
+        return inputString
     }
-
- */
-
 }
