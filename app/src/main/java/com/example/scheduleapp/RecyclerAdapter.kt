@@ -1,7 +1,6 @@
 package com.example.scheduleapp
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import com.google.gson.Gson
-import java.io.FileInputStream
-import java.io.ObjectOutputStream
+import java.io.BufferedReader
+import java.io.IOException
 
 const val EXTRA_MESSAGE = "com.example.scheduleapp.MESSAGE"
 
@@ -28,6 +27,8 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
+        //val text = getData(view.context)
+        //Toast.makeText(view.context, text, Toast.LENGTH_SHORT).show()
         return ViewHolder(view)
     }
 
@@ -55,8 +56,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                 toast.show()
 
 //                // Test stuff
-                val testActivity = ActivityClass("TITLE    ", "DESCRIPTION    ", false)
-                saveData(testActivity, itemView.context)
+                saveData(activityClasses, itemView.context)
 
 
                 val activity = itemView.context
@@ -71,18 +71,32 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     }
 
     fun addActivity(title: String, description: String, isRecurring: Boolean) {
-        var activityClass = ActivityClass(title, description, isRecurring)
+        val activityClass = ActivityClass(title, description, isRecurring)
         activityClasses.add(activityClass)
         val index = activityClasses.size + 1
-        notifyItemInserted(index)
+        this.notifyItemInserted(index)
     }
 
-    private fun saveData(activity: ActivityClass, context: Context) {
+    private fun saveData(activity: ArrayList<ActivityClass>, context: Context) {
 
-        val jsonString:String = Gson().toJson(activity)
+        for (item in activity) {
+            val jsonString: String = Gson().toJson(item)
+            val file = File(context.filesDir, "PostJson.json")
+            file.writeText(jsonString, Charsets.UTF_8)
+        }
+
+    }
+/*
+    private fun getData(context: Context): String? {
+
+        var gson = Gson()
         val file = File(context.filesDir, "PostJson.json")
-        file.writeText(jsonString, Charsets.UTF_8)
+        val bufferedReader: BufferedReader = file.bufferedReader()
+        val inputString = bufferedReader.use { it.readText() }
+        return gson.fromJson(inputString)
 
     }
+
+ */
 
 }
