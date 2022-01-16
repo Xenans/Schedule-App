@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import com.google.gson.Gson
+import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.ObjectOutputStream
 
@@ -28,6 +29,18 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
+
+        //trying to update recycle
+        val gson = Gson()
+        val file = File(view.context.filesDir, "PostJson.json")
+        val bufferedReader: BufferedReader = file.bufferedReader()
+        val inputString = bufferedReader.use { it.readText() }
+        var post = gson.fromJson(inputString, Post::class.java)
+
+        val toast = Toast.makeText(view.context,inputString, Toast.LENGTH_SHORT)
+        toast.show()
+
+
         return ViewHolder(view)
     }
 
@@ -55,6 +68,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                 toast.show()
 
 //                // Test stuff
+                addActivity("Test", "Terence smells", true)
                 val testActivity = ActivityClass("TITLE    ", "DESCRIPTION    ", false)
                 saveData(testActivity, itemView.context)
 
@@ -73,8 +87,8 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     fun addActivity(title: String, description: String, isRecurring: Boolean) {
         var activityClass = ActivityClass(title, description, isRecurring)
         activityClasses.add(activityClass)
-        val index = activityClasses.size + 1
-        notifyItemInserted(index)
+        val index = activityClasses.size - 1
+        this.notifyItemInserted(index)
     }
 
     private fun saveData(activity: ActivityClass, context: Context) {
